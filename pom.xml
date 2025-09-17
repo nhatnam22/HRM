@@ -51,6 +51,13 @@
         <liquibase-plugin.url/>
         <liquibase-plugin.username/>
         <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok.version>1.18.38</lombok.version>
+        <awssdk-s3.version>2.31.41</awssdk-s3.version>
+        <awssdk-lambda.version>2.31.41</awssdk-lambda.version>
+        <icu4j.version>77.1</icu4j.version>
+        <poi.version>5.2.3</poi.version>
+        <opencsv.version>5.7.1</opencsv.version>
+        <flying-saucer.version>9.1.22</flying-saucer.version>
         <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.4.1</maven-clean-plugin.version>
@@ -137,6 +144,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -246,6 +259,42 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
             <scope>provided</scope>
+        </dependency>
+      <!-- AWS S3 -->
+      <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/s3 -->
+        <dependency>
+           <groupId>software.amazon.awssdk</groupId>
+           <artifactId>s3</artifactId>
+           <version>2.31.41</version>
+        </dependency>
+      <!-- https://mvnrepository.com/artifact/software.amazon.awssdk/lambda -->
+        <dependency>
+           <groupId>software.amazon.awssdk</groupId>
+           <artifactId>lambda</artifactId>
+           <version>2.31.41</version>
+        </dependency>
+      <!-- https://mvnrepository.com/artifact/com.ibm.icu/icu4j -->
+        <dependency>
+           <groupId>com.ibm.icu</groupId>
+           <artifactId>icu4j</artifactId>
+           <version>${icu4j.version}</version>
+        </dependency>
+       <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>${poi.version}</version>
+		</dependency>
+	   <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>org.xhtmlrenderer</groupId>
+            <artifactId>flying-saucer-pdf</artifactId>
+            <version>${flying-saucer.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -415,6 +464,11 @@
                             <path>
                                 <groupId>org.glassfish.jaxb</groupId>
                                 <artifactId>jaxb-runtime</artifactId>
+                            </path>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
                             </path>
                         </annotationProcessorPaths>
                     </configuration>

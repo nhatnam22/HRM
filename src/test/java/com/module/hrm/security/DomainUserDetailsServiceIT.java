@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import com.module.hrm.IntegrationTest;
 import com.module.hrm.domain.User;
 import com.module.hrm.repository.UserRepository;
-import com.module.hrm.service.UserService;
 import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -35,8 +34,8 @@ class DomainUserDetailsServiceIT {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+    //    @Autowired
+    //    private UserService userService;
 
     @Autowired
     @Qualifier("userDetailsService")
@@ -85,12 +84,12 @@ class DomainUserDetailsServiceIT {
         userRepository.save(getUserThree());
     }
 
-    @AfterEach
-    void cleanup() {
-        userService.deleteUser(USER_ONE_LOGIN);
-        userService.deleteUser(USER_TWO_LOGIN);
-        userService.deleteUser(USER_THREE_LOGIN);
-    }
+    //    @AfterEach
+    //    void cleanup() {
+    //        userService.deleteUser(USER_ONE_LOGIN);
+    //        userService.deleteUser(USER_TWO_LOGIN);
+    //        userService.deleteUser(USER_THREE_LOGIN);
+    //    }
 
     @Test
     void assertThatUserCanBeFoundByLogin() {

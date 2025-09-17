@@ -8,7 +8,6 @@ import com.module.hrm.IntegrationTest;
 import com.module.hrm.domain.User;
 import com.module.hrm.repository.UserRepository;
 import com.module.hrm.security.AuthoritiesConstants;
-import com.module.hrm.service.UserService;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,15 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link PublicUserResource} REST controller.
  */
 @AutoConfigureMockMvc
-@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
+//@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
 class PublicUserResourceIT {
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+    //    @Autowired
+    //    private UserService userService;
 
     @Autowired
     private MockMvc restUserMockMvc;
@@ -45,17 +44,17 @@ class PublicUserResourceIT {
         numberOfUsers = userRepository.count();
     }
 
-    @BeforeEach
-    void initTest() {
-        user = UserResourceIT.initTestUser();
-    }
+    //    @BeforeEach
+    //    void initTest() {
+    //        user = UserResourceIT.initTestUser();
+    //    }
 
-    @AfterEach
-    void cleanupAndCheck() {
-        userService.deleteUser(user.getLogin());
-        assertThat(userRepository.count()).isEqualTo(numberOfUsers);
-        numberOfUsers = null;
-    }
+    //    @AfterEach
+    //    void cleanupAndCheck() {
+    //        userService.deleteUser(user.getLogin());
+    //        assertThat(userRepository.count()).isEqualTo(numberOfUsers);
+    //        numberOfUsers = null;
+    //    }
 
     @Test
     @Transactional

@@ -18,7 +18,8 @@ logging:
     ROOT: DEBUG
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
-    com.module.hrm: DEBUG
+    vn.pratek.dms: DEBUG
+    javax.management.remote.rmi: ERROR
 
 spring:
   devtools:
@@ -32,9 +33,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/HRM
-    username: HRM
-    password:
+    url: jdbc:postgresql://localhost:5432/vietcos-local
+    username: postgres
+    password: Namman..12
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -78,7 +79,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: ZmE3ODllMDE4ZmQxZjkzZDJmM2M4M2JmZTY5YjAwZTE3YzNjZGJlNThmYzk3ZWVjYWZjOTVmODU0MzZkZjgwMGRlMzQwZjAzYTRhNmJhOWVlNTkyNDc2OGZjZWQ2YjNlY2FhYzMzODE2NDZmNWU1ODM2OThmOTFlZGFjMzYzYWI=
+        base64-secret: NDU2ZTZiNmJlYjRjZDdhNTBhZDVkNTY0MzFmYTQzYjNiNWE0MDZiMjhiNGRiMGFiYWQxNTIzOGE5YjU2N2UzYTA5YTI1NTA0Y2M3MGE4ZDE5ZmY1OTRmZDM0YzRmMjExMDYyYmJmZTBjYjdlZmJhNjZlNzI2NjhlZGE1NTgyMjY=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
@@ -100,4 +101,14 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  aws:
+    key-enabled: true
+    key-access: AKIAXPEAJ5MCG3QU5FPU
+    key-secret: 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
+    region: ap-southeast-1
+    s3bucket: vietcos-s3-uat
+    s3bucket-ir: vietcos-ir-s3-uat
+    decompression-lambda: vietcos-images-decompression-uat
+  maps:
+    api-key: AIzaSyBn8WXHw8UXGVPQhHskYBzBz3zhRZrlSPY

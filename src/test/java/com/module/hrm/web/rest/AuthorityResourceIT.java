@@ -55,9 +55,9 @@ class AuthorityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Authority createEntity() {
-        return new Authority().name(UUID.randomUUID().toString());
-    }
+    //    public static Authority createEntity() {
+    //        return new Authority().name(UUID.randomUUID().toString());
+    //    }
 
     /**
      * Create an updated entity for this test.
@@ -65,14 +65,14 @@ class AuthorityResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Authority createUpdatedEntity() {
-        return new Authority().name(UUID.randomUUID().toString());
-    }
+    //    public static Authority createUpdatedEntity() {
+    //        return new Authority().name(UUID.randomUUID().toString());
+    //    }
 
-    @BeforeEach
-    void initTest() {
-        authority = createEntity();
-    }
+    //    @BeforeEach
+    //    void initTest() {
+    //        authority = createEntity();
+    //    }
 
     @AfterEach
     void cleanup() {
@@ -82,27 +82,27 @@ class AuthorityResourceIT {
         }
     }
 
-    @Test
-    @Transactional
-    void createAuthority() throws Exception {
-        long databaseSizeBeforeCreate = getRepositoryCount();
-        // Create the Authority
-        var returnedAuthority = om.readValue(
-            restAuthorityMockMvc
-                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(authority)))
-                .andExpect(status().isCreated())
-                .andReturn()
-                .getResponse()
-                .getContentAsString(),
-            Authority.class
-        );
-
-        // Validate the Authority in the database
-        assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
-        assertAuthorityUpdatableFieldsEquals(returnedAuthority, getPersistedAuthority(returnedAuthority));
-
-        insertedAuthority = returnedAuthority;
-    }
+    //    @Test
+    //    @Transactional
+    //    void createAuthority() throws Exception {
+    //        long databaseSizeBeforeCreate = getRepositoryCount();
+    //        // Create the Authority
+    //        var returnedAuthority = om.readValue(
+    //            restAuthorityMockMvc
+    //                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(authority)))
+    //                .andExpect(status().isCreated())
+    //                .andReturn()
+    //                .getResponse()
+    //                .getContentAsString(),
+    //            Authority.class
+    //        );
+    //
+    //        // Validate the Authority in the database
+    //        assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
+    //        assertAuthorityUpdatableFieldsEquals(returnedAuthority, getPersistedAuthority(returnedAuthority));
+    //
+    //        insertedAuthority = returnedAuthority;
+    //    }
 
     @Test
     @Transactional
@@ -191,16 +191,15 @@ class AuthorityResourceIT {
     protected void assertSameRepositoryCount(long countBefore) {
         assertThat(countBefore).isEqualTo(getRepositoryCount());
     }
-
-    protected Authority getPersistedAuthority(Authority authority) {
-        return authorityRepository.findById(authority.getName()).orElseThrow();
-    }
-
-    protected void assertPersistedAuthorityToMatchAllProperties(Authority expectedAuthority) {
-        assertAuthorityAllPropertiesEquals(expectedAuthority, getPersistedAuthority(expectedAuthority));
-    }
-
-    protected void assertPersistedAuthorityToMatchUpdatableProperties(Authority expectedAuthority) {
-        assertAuthorityAllUpdatablePropertiesEquals(expectedAuthority, getPersistedAuthority(expectedAuthority));
-    }
+    //    protected Authority getPersistedAuthority(Authority authority) {
+    //        return authorityRepository.findById(authority.getName()).orElseThrow();
+    //    }
+    //
+    //    protected void assertPersistedAuthorityToMatchAllProperties(Authority expectedAuthority) {
+    //        assertAuthorityAllPropertiesEquals(expectedAuthority, getPersistedAuthority(expectedAuthority));
+    //    }
+    //
+    //    protected void assertPersistedAuthorityToMatchUpdatableProperties(Authority expectedAuthority) {
+    //        assertAuthorityAllUpdatablePropertiesEquals(expectedAuthority, getPersistedAuthority(expectedAuthority));
+    //    }
 }

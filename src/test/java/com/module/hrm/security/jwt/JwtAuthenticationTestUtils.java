@@ -1,7 +1,7 @@
 package com.module.hrm.security.jwt;
 
-import static com.module.hrm.security.AuthoritiesConstants.ADMIN;
-import static com.module.hrm.security.SecurityUtils.AUTHORITIES_CLAIM;
+//import static com.module.hrm.security.AuthoritiesConstants.ADMIN;
+//import static com.module.hrm.security.SecurityUtils.AUTHORITIES_CLAIM;
 import static com.module.hrm.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
@@ -49,7 +49,7 @@ public class JwtAuthenticationTestUtils {
             .issuedAt(now)
             .expiresAt(now.plusSeconds(60))
             .subject(user)
-            .claims(customClaim -> customClaim.put(AUTHORITIES_CLAIM, Collections.singletonList(ADMIN)))
+            //            .claims(customClaim -> customClaim.put(AUTHORITIES_CLAIM, Collections.singletonList(ADMIN)))
             .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();

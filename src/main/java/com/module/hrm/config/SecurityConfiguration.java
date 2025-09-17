@@ -3,6 +3,7 @@ package com.module.hrm.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.module.hrm.security.*;
+import com.module.hrm.security.jwt.JwtAuthConverter;
 import com.module.hrm.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,9 +28,11 @@ import tech.jhipster.config.JHipsterProperties;
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
+    private final JwtAuthConverter jwtAuthConverter;
 
-    public SecurityConfiguration(JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(JHipsterProperties jHipsterProperties, JwtAuthConverter jwtAuthConverter) {
         this.jHipsterProperties = jHipsterProperties;
+        this.jwtAuthConverter = jwtAuthConverter;
     }
 
     @Bean
@@ -63,20 +66,18 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
                     .requestMatchers(mvc.pattern("/content/**")).permitAll()
                     .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
-                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, Constants.USER_API_URL + "/authenticate")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.POST, Constants.USER_API_URL + "/reset-password")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, Constants.USER_API_URL + "/authenticate")).permitAll()
+
+                    .requestMatchers(mvc.pattern(Constants.USER_API_URL +"/**")).authenticated()
+
+                    .requestMatchers(mvc.pattern(Constants.MANAGEMENT_API_URL + "/**")).hasAuthority(AuthoritiesConstants.ROOT)
+                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ROOT)
+
+                    .requestMatchers(mvc.pattern(Constants.MANAGEMENT_API_URL + "/health")).permitAll()
+                    .requestMatchers(mvc.pattern(Constants.MANAGEMENT_API_URL + "/health/**")).permitAll()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(exceptions ->
@@ -84,7 +85,8 @@ public class SecurityConfiguration {
                     .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                     .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
             )
-            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));
+
         return http.build();
     }
 

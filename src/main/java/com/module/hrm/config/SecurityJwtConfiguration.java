@@ -2,7 +2,7 @@ package com.module.hrm.config;
 
 import static com.module.hrm.security.SecurityUtils.JWT_ALGORITHM;
 
-import com.module.hrm.management.SecurityMetersService;
+import com.module.hrm.service.SecurityMetersService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import javax.crypto.SecretKey;

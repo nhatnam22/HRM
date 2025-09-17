@@ -1,7 +1,12 @@
 package com.module.hrm.security;
 
+import com.module.hrm.config.Constants;
+import com.module.hrm.security.jwt.JwtAuthToken;
+import com.module.hrm.web.common.enumeration.UserType;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,10 +23,6 @@ import org.springframework.security.oauth2.jwt.Jwt;
 public final class SecurityUtils {
 
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
-
-    public static final String AUTHORITIES_CLAIM = "auth";
-
-    public static final String USER_ID_CLAIM = "userId";
 
     private SecurityUtils() {}
 
@@ -46,31 +47,6 @@ public final class SecurityUtils {
             return s;
         }
         return null;
-    }
-
-    /**
-     * Get the JWT of the current user.
-     *
-     * @return the JWT of the current user.
-     */
-    public static Optional<String> getCurrentUserJWT() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
-    }
-
-    /**
-     * Get the Id of the current user.
-     *
-     * @return the Id of the current user.
-     */
-    public static Optional<Long> getCurrentUserId() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        return Optional.ofNullable(securityContext.getAuthentication())
-            .filter(authentication -> authentication.getPrincipal() instanceof ClaimAccessor)
-            .map(authentication -> (ClaimAccessor) authentication.getPrincipal())
-            .map(principal -> principal.getClaim(USER_ID_CLAIM));
     }
 
     /**
@@ -118,5 +94,72 @@ public final class SecurityUtils {
 
     private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority);
+    }
+
+    //---Helper method-------------------------------------------------------------
+    /**
+     * Get the user code of the current user.
+     *
+     * @return the user code of the current user.
+     */
+    public static String extractCurrentUserCode() {
+        if (extractUserDetails() != null) {
+            return extractUserDetails().getUserCode();
+        }
+
+        return Constants.SYSTEM;
+    }
+
+    /**
+     * Get the company code of the current user.
+     *
+     * @return the company code of the current user.
+     */
+    public static String extractCurrentCompanyCode() {
+        if (extractUserDetails() != null) {
+            return extractUserDetails().getCompanyCode();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the distributor view code of the current user.
+     *
+     * @return the distributor view code of the current user.
+     */
+    public static String extractUserType() {
+        if (extractUserDetails() != null) {
+            return extractUserDetails().getUserType();
+        }
+
+        return UserType.NONE.getValue();
+    }
+
+    /**
+     * Check User is administrator
+     *
+     * @return
+     */
+    public static boolean isAdministrator() {
+        return UserType.ADMIN.getValue().equals(extractUserType());
+    }
+
+    public static JwtAuthToken extractUserDetails() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        if (securityContext.getAuthentication() == null) {
+            return null;
+        } else if (securityContext.getAuthentication() instanceof JwtAuthToken) {
+            JwtAuthToken jwtAuthToken = (JwtAuthToken) securityContext.getAuthentication();
+            return jwtAuthToken;
+        }
+
+        return null;
+    }
+
+    public static Set<String> getCurrentAuthorities() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return getAuthorities(authentication).collect(Collectors.toSet());
     }
 }

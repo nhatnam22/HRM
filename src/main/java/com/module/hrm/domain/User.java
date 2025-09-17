@@ -2,6 +2,7 @@ package com.module.hrm.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.module.hrm.config.Constants;
+import com.module.hrm.security.AuthoritiesConstants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -22,11 +23,9 @@ import org.hibernate.annotations.BatchSize;
 @Table(name = "jhi_user")
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jhi_user_id_seq")
+    @SequenceGenerator(name = "jhi_user_id_seq", sequenceName = "jhi_user_id_seq", allocationSize = 50)
     private Long id;
 
     @NotNull
@@ -50,8 +49,8 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     private String lastName;
 
     @Email
-    @Size(min = 5, max = 254)
-    @Column(length = 254, unique = true)
+    @Size(max = 256)
+    @Column(length = 256, unique = true)
     private String email;
 
     @NotNull
@@ -61,10 +60,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Size(min = 2, max = 10)
     @Column(name = "lang_key", length = 10)
     private String langKey;
-
-    @Size(max = 256)
-    @Column(name = "image_url", length = 256)
-    private String imageUrl;
 
     @Size(max = 20)
     @Column(name = "activation_key", length = 20)
@@ -79,15 +74,29 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "reset_date")
     private Instant resetDate = null;
 
-    @JsonIgnore
+    private String userType;
+    private Boolean pwdInitFlag = Boolean.TRUE;
+
     @ManyToMany
     @JoinTable(
-        name = "jhi_user_authority",
+        name = "jhi_user_role",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
-        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
+        inverseJoinColumns = { @JoinColumn(name = "role_name", referencedColumnName = "name") }
     )
     @BatchSize(size = 20)
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
+
+    public boolean isSystemUser() {
+        if (roles.isEmpty()) {
+            return false;
+        }
+
+        return roles.stream().anyMatch(role -> AuthoritiesConstants.SYSTEM_ROLE.contains(role.getName()));
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
+    }
 
     public Long getId() {
         return id;
@@ -138,14 +147,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.email = email;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public boolean isActivated() {
         return activated;
     }
@@ -186,12 +187,28 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         this.langKey = langKey;
     }
 
-    public Set<Authority> getAuthorities() {
-        return authorities;
+    public String getUserType() {
+        return userType;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+    public Boolean getPwdInitFlag() {
+        return pwdInitFlag;
+    }
+
+    public void setPwdInitFlag(Boolean pwdInitFlag) {
+        this.pwdInitFlag = pwdInitFlag;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -219,7 +236,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +

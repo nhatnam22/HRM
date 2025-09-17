@@ -3,8 +3,7 @@ package com.module.hrm.security.jwt;
 import com.module.hrm.config.SecurityConfiguration;
 import com.module.hrm.config.SecurityJwtConfiguration;
 import com.module.hrm.config.WebConfigurer;
-import com.module.hrm.management.SecurityMetersService;
-import com.module.hrm.web.rest.AuthenticateController;
+import com.module.hrm.service.SecurityMetersService;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -25,7 +24,7 @@ import tech.jhipster.config.JHipsterProperties;
         SecurityConfiguration.class,
         SecurityJwtConfiguration.class,
         SecurityMetersService.class,
-        AuthenticateController.class,
+        //        AuthenticateController.class,
         JwtAuthenticationTestUtils.class,
     }
 )
