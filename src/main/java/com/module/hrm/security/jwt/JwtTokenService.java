@@ -5,7 +5,7 @@ import static com.module.hrm.security.SecurityUtils.JWT_ALGORITHM;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -19,11 +19,11 @@ public class JwtTokenService {
 
     private final JwtEncoder jwtEncoder;
 
-    //    @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
-    private long tokenValidityInSeconds = 86400;
+    @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
+    private long tokenValidityInSeconds;
 
-    //    @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds-for-remember-me:0}")
-    private long tokenValidityInSecondsForRememberMe = 2592000;
+    @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds-for-remember-me:0}")
+    private long tokenValidityInSecondsForRememberMe;
 
     private static final String AUTHORITIES_KEY = "auth";
 

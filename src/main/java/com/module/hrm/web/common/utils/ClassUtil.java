@@ -57,6 +57,7 @@ public class ClassUtil {
         }
     }
 
+    // value là dữ liệu string trong file excel còn field sẽ có kiểu dữ liệu đã định nghĩa trong Dto
     private static Object parseValueFieldType(Object value, Field field) {
         if (field.getType().equals(Character.class)) {
             return ConvertUtil.toString(value).charAt(0);

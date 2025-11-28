@@ -151,3 +151,7 @@ Desktop.ini
 ######################
 coverage/
 .nyc_output/
+# Ignore application configuration files
+src/main/resources/config/application.yml
+src/main/resources/config/application-dev.yml
+src/main/resources/config/application-prod.yml

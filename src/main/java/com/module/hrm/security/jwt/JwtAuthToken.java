@@ -36,9 +36,6 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
     private String fullName;
 
     @Getter
-    private String distributorCode;
-
-    @Getter
     private String langKey;
 
     public JwtAuthToken(Jwt jwt, String principal, Collection<? extends GrantedAuthority> authorities, User user, UserAccount userAccount) {
@@ -55,7 +52,6 @@ public class JwtAuthToken extends AbstractAuthenticationToken {
         this.companyCode = userAccount.getCompanyCode();
         this.userCode = userAccount.getUserCode();
         this.fullName = userAccount.getFullName();
-        this.distributorCode = userAccount.getDistributorCode();
 
         Group group = userAccount.getGroups().stream().findFirst().orElse(null);
         if (group != null) {

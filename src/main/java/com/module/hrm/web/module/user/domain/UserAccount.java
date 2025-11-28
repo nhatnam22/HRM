@@ -14,7 +14,7 @@ import org.hibernate.annotations.BatchSize;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "vmu_user")
+@Table(name = "vmu_account_employee")
 public class UserAccount extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Id
@@ -22,8 +22,6 @@ public class UserAccount extends AbstractAuditingEntity<Long> implements Seriali
     private Long userId;
 
     private String companyCode;
-
-    private String distributorCode;
 
     private String userCode;
 
@@ -47,9 +45,9 @@ public class UserAccount extends AbstractAuditingEntity<Long> implements Seriali
 
     private String referUserCode;
 
-    private Boolean deleteFlag = Boolean.FALSE;
+    private String departmentCode;
 
-    private Long distributorId;
+    private Boolean deleteFlag = Boolean.FALSE;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userAccount", orphanRemoval = true)
     @BatchSize(size = 20)

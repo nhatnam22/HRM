@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 public class LocalDateUtil {
 
@@ -48,6 +49,19 @@ public class LocalDateUtil {
      */
     public static LocalDate getLastDayOfPreviousMonth() {
         return nowLocalDate().withDayOfMonth(1).minusDays(1);
+    }
+
+    /**
+     * getEpochMilli
+     *
+     * @param localDateTime
+     * @return
+     */
+    public static long getEpochMilli(LocalDateTime localDateTime) {
+        ZonedDateTime zdt = ZonedDateTime.of(localDateTime, HO_CHI_MINH);
+        long epochMilli = zdt.toInstant().toEpochMilli();
+
+        return epochMilli;
     }
 
     /**

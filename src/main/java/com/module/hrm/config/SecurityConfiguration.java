@@ -2,6 +2,8 @@ package com.module.hrm.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.module.hrm.config.filter.JwtFilter;
+import com.module.hrm.repository.RoleAuthorityRepository;
 import com.module.hrm.security.*;
 import com.module.hrm.security.jwt.JwtAuthConverter;
 import com.module.hrm.web.filter.SpaWebFilter;
@@ -29,10 +31,20 @@ public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
     private final JwtAuthConverter jwtAuthConverter;
+    private final DomainUserDetailsService userDetailsService;
+    private final RoleAuthorityRepository roleAuthorityRepository;
 
-    public SecurityConfiguration(JHipsterProperties jHipsterProperties, JwtAuthConverter jwtAuthConverter) {
+    public SecurityConfiguration(
+        JHipsterProperties jHipsterProperties,
+        JwtAuthConverter jwtAuthConverter,
+        DomainUserDetailsService userDetailsService,
+        RoleAuthorityRepository roleAuthorityRepository
+    ) {
+        super();
         this.jHipsterProperties = jHipsterProperties;
         this.jwtAuthConverter = jwtAuthConverter;
+        this.userDetailsService = userDetailsService;
+        this.roleAuthorityRepository = roleAuthorityRepository;
     }
 
     @Bean
@@ -45,6 +57,10 @@ public class SecurityConfiguration {
         http
             .cors(withDefaults())
             .csrf(csrf -> csrf.disable())
+            .addFilterBefore(
+                new JwtFilter(userDetailsService, roleAuthorityRepository, jHipsterProperties),
+                BasicAuthenticationFilter.class
+            )
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
             .headers(headers ->
                 headers
