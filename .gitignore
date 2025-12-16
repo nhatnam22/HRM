@@ -155,3 +155,7 @@ coverage/
 src/main/resources/config/application.yml
 src/main/resources/config/application-dev.yml
 src/main/resources/config/application-prod.yml
+
+HRMModule-clean/
+HRMModule-fixed/
+git-filter-repo/
